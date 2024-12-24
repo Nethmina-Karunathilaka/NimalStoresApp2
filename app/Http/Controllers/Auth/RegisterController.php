@@ -52,6 +52,8 @@ class RegisterController extends Controller
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
+            'address' => ['required','string','max:255'],
+            'mobile_number' => ['required','string','max:10','min:10'],
         ]);
     }
 
@@ -67,6 +69,15 @@ class RegisterController extends Controller
             'name' => $data['name'],
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
+            'address' =>$data['address'],
+            'mobile_number'=>$data['mobile_number']
         ]);
     }
+
+    protected function registered(Request $request, $user)
+    {
+        return redirect()->route('mobile.verification')
+            ->with('status', 'Please verify your mobile number.');
+    }
+
 }

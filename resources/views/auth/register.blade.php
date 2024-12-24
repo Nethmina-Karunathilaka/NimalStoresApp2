@@ -112,7 +112,26 @@
                 <input type="text" class="form-control @error('name') is-invalid @enderror" id="name" name="name" placeholder="Enter First Name" value="{{ old('name') }}" required autocomplete="name" autofocus>
                 @error('name')
                     <span class="invalid-feedback" role="alert">
-                        <strong>{{ $message }}</strong>
+                        <p>{{ $message }}</p>
+                    </span>
+                @enderror
+            </div>
+            <label for="mobile_number">Mobile Number</label>
+            <div>
+                <input type="text" class="form-control @error('name') is-invalid @enderror" id="mobile_number" name="mobile_number" placeholder="Mobile Number" value="{{ old('mobile_number', auth()->user()->mobile_number ?? '') }}" required autocomplete="mobile_number" autofocus>
+                @error('mobile_number')
+                    <span class="invalid-feedback" role="alert">
+                        <p>{{ $message }}</p>
+                    </span>
+                @enderror
+            </div>
+
+            <label for="address">Address</label>
+            <div>
+                <input type="text" class="form-control @error('name') is-invalid @enderror" id="address" name="address" placeholder="Enter First Name" value="{{ old('address', auth()->user()->address ?? '') }}" required autocomplete="address" autofocus>
+                @error('address')
+                    <span class="invalid-feedback" role="alert">
+                        <p>{{ $message }}</p>
                     </span>
                 @enderror
             </div>
@@ -121,7 +140,7 @@
                 <input type="email" id="email"  placeholder="Enter Your Email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" required autocomplete="email">
                 @error('email')
                     <span class="invalid-feedback" role="alert">
-                        strong>{{ $message }}</strong>
+                        <p>{{ $message }}</p>
                     </span>
                 @enderror
             </div>
@@ -131,7 +150,7 @@
                 <button type="button" class="toggle-password" onclick="togglePassword('password')">Show</button>
                 @error('password')
                     <span class="invalid-feedback" role="alert">
-                        <strong>{{ $message }}</strong>
+                        <p>{{ $message }}</p>
                     </span>
                 @enderror
             </div>

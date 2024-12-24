@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\MobileverifyController;
 
 /*
 |--------------------------------------------------------------------------
@@ -21,9 +22,6 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -45,5 +43,21 @@ Route::middleware(['auth', 'is_admin'])->prefix('admin')->name('admin.')->group(
 
 
 Route::get('/products', [UserController::class, 'showProducts'])->name('products');
+
+
+
+Route::middleware('auth')->group(function () {
+    Route::get('/mobile-verification', [MobileverifyController::class, 'showVerificationForm'])->name('mobile-verification');
+    Route::post('/send-verification', [MobileverifyController::class, 'sendVerification'])->name('send-verification');
+    Route::post('/verify-code', [MobileverifyController::class, 'verifyCode'])->name('verify.code');
+});
+
+
+
+Route::middleware('auth')->group(function () {
+    Route::get('/dashboard', function () {
+        return view('dashboard');
+    });
+});
 
 require __DIR__.'/auth.php';

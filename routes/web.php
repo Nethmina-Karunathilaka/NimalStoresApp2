@@ -6,6 +6,9 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\MobileverifyController;
+use App\Http\Controllers\Auth\VerificationController;
+use App\Http\Controllers\CartController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -29,6 +32,16 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
+Route::prefix('cart')->group(function () {
+    Route::get('/', [CartController::class, 'index'])->name('cart.index');
+    Route::post('/add/{id}', [CartController::class, 'add'])->name('cart.add');
+    Route::post('/update/{id}', [CartController::class, 'update'])->name('cart.update');
+    Route::post('/remove/{id}', [CartController::class, 'remove'])->name('cart.remove');
+    Route::post('/clear', [CartController::class, 'clear'])->name('cart.clear');
+});
+
+
+
 Route::middleware(['auth', 'is_admin'])->prefix('admin')->group(function () {
     Route::get('/', [AdminController::class, 'index'])->name('admin.dashboard');
     Route::resource('admin', AdminController::class);
@@ -46,18 +59,29 @@ Route::get('/products', [UserController::class, 'showProducts'])->name('products
 
 
 
-Route::middleware('auth')->group(function () {
-    Route::get('/mobile-verification', [MobileverifyController::class, 'showVerificationForm'])->name('mobile-verification');
-    Route::post('/send-verification', [MobileverifyController::class, 'sendVerification'])->name('send-verification');
-    Route::post('/verify-code', [MobileverifyController::class, 'verifyCode'])->name('verify.code');
+
+Route::middleware(['auth'])->group(function () {
+    // Show the email verification notice (if not verified)
+    Route::get('email/verify', function () {
+        return view('auth.verify-email');
+    })->name('verification.notice');
+
+    // Handle the email verification link
+    Route::get('email/verify/{id}/{hash}', [VerificationController::class, 'verify'])
+        ->name('verification.verify');
+
+    // Resend verification link
+    Route::post('email/verification-notification', [VerificationController::class, 'resend'])
+        ->name('verification.resend');
 });
 
 
-
-Route::middleware('auth')->group(function () {
+Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/dashboard', function () {
         return view('dashboard');
     });
 });
+
+
 
 require __DIR__.'/auth.php';

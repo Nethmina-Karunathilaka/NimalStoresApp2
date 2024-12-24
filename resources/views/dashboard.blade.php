@@ -37,7 +37,7 @@
             <div><i class="fa-solid fa-user"></i>
               <span style="margin-left: 3px;">Hi {{ Auth::user()->name }} !..</span><i class="fa-solid fa-caret-down" style="margin-left: 6px;"></i>
               <div class="dropdown-items">
-                <a href="">Account</a>
+                <a href="{{route('profile.edit')}}">Account</a>
                 <a href="signup1page.html">My Orders</a>
                 <a href="">Cart</a>
                 <div>

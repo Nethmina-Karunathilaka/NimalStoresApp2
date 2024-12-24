@@ -93,7 +93,7 @@
                 <div class="card-des"><p>{{ Str::limit($product->description, 50) }}</p></div>
 
                 <!-- Optional: Add to Cart or View Details button -->
-                <form method="POST" action="">
+                <form method="POST" action="{{ route('cart.add', $product->id) }}">
                     @csrf
                     <input type="hidden" name="product_id" value="{{ $product->id }}">
                     <div class="card-qty">

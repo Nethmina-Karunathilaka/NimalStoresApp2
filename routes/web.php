@@ -8,6 +8,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\MobileverifyController;
 use App\Http\Controllers\Auth\VerificationController;
 use App\Http\Controllers\CartController;
+use App\Http\Controllers\OrderController;
 
 
 /*
@@ -81,6 +82,13 @@ Route::middleware(['auth', 'verified'])->group(function () {
         return view('dashboard');
     });
 });
+
+
+
+Route::post('/checkout', [OrderController::class, 'store'])->middleware('auth')->name('orders.checkout'); // Stores the order after checkout
+Route::get('/orders', [OrderController::class, 'index'])->middleware('auth')->name('orders.index'); // View user's orders (named route)
+Route::get('/admin/orders', [OrderController::class, 'adminIndex'])->middleware('admin')->name('admin.orders.index'); // Admin view all orders
+Route::patch('/admin/orders/{id}/status', [OrderController::class, 'updateStatus'])->middleware('admin'); // Admin updates order status
 
 
 

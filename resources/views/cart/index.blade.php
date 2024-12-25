@@ -43,17 +43,18 @@
             @csrf
             <button type="submit" class="btn btn-danger">Clear Cart</button>
         </form>
+        <button id="checkout-button" class="btn btn-dark">Checkout</button>
     @else
         <p>Your cart is empty!</p>
     @endif
 </div>
 
 <!-- Modal for Clear Cart Confirmation -->
-<div class="modal fade" id="confirmationModal" tabindex="-1" aria-labelledby="confirmationModalLabel" aria-hidden="true">
+<div class="modal fade" id="clearCartModal" tabindex="-1" aria-labelledby="clearCartModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="confirmationModalLabel">Confirm Action</h5>
+                <h5 class="modal-title" id="clearCartModalLabel">Confirm Action</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
@@ -67,51 +68,68 @@
     </div>
 </div>
 
+<!-- Modal for Checkout Confirmation -->
+<div class="modal fade" id="checkoutModal" tabindex="-1" aria-labelledby="checkoutModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="checkoutModalLabel">Confirm Checkout</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>Your total is: Rs <span id="order-total"></span></p>
+            </div>
+            <div class="modal-footer">
+                <form action="{{ route('orders.checkout') }}" method="POST" id="checkoutForm">
+                    @csrf
+                    <button type="submit" class="btn btn-success">Confirm</button>
+                </form>
+                <button class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
 @endsection
 
 @section('scripts')
 <script>
-    let currentClearCartForm = null; // Track the form being submitted
+    // Store the form being cleared
+    let currentClearCartForm = null;
 
     // Attach event listeners to clear-cart forms
     document.querySelectorAll('.clear-cart-form').forEach(form => {
         form.addEventListener('submit', function (e) {
-            e.preventDefault(); // Prevent default form submission
-            currentClearCartForm = this; // Store the current form
-            const confirmationModal = new bootstrap.Modal(document.getElementById('confirmationModal')); // Initialize modal
-            confirmationModal.show(); // Show confirmation modal
+            e.preventDefault();
+            currentClearCartForm = this;
+            const clearCartModal = new bootstrap.Modal(document.getElementById('clearCartModal'));
+            clearCartModal.show();
         });
     });
 
-    // Handle confirmation button click
+    // Handle the clear cart confirmation
     document.getElementById('confirmClearCart').addEventListener('click', function () {
         if (currentClearCartForm) {
-            // Fetch form data
-            const formData = new FormData(currentClearCartForm);
-
-            // Send request to server
-            fetch(currentClearCartForm.action, {
-                method: 'POST',
-                headers: {
-                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content, // CSRF token for security
-                },
-                body: formData,
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.message) {
-                    alert(data.message); // Display success message
-                    const confirmationModal = bootstrap.Modal.getInstance(document.getElementById('confirmationModal'));
-                    confirmationModal.hide(); // Hide the modal after successful action
-                    location.reload(); // Reload the page to reflect changes in the cart
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                alert('An error occurred while processing your request.');
-            });
+            currentClearCartForm.submit();
         }
     });
 
+    // Checkout button functionality
+    document.getElementById('checkout-button').addEventListener('click', function () {
+        console.log("Checkout button clicked");
+        const total = calculateTotal(); // Calculate the total dynamically
+        document.getElementById('order-total').textContent = total.toFixed(2);
+        const checkoutModal = new bootstrap.Modal(document.getElementById('checkoutModal'));
+        checkoutModal.show();
+    });
+
+    // Calculate cart total dynamically
+    function calculateTotal() {
+        let total = 0;
+        const cartItems = @json(session('cart', []));
+        cartItems.forEach(item => {
+            total += item.price * item.quantity;
+        });
+        return total;
+    }
 </script>
 @endsection

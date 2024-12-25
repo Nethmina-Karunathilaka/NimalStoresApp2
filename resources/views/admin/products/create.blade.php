@@ -1,6 +1,7 @@
-@extends('layouts.app')
+@extends('layouts.admin')
 
 @section('content')
+    <br><br>
     <div class="container">
         <h1>Add New Product</h1>
 
@@ -26,7 +27,7 @@
                 <input type="file" name="image" id="image" class="form-control">
             </div>
 
-            <button type="submit" class="btn btn-primary mt-3">Add Product</button>
+            <button type="submit" class="btn btn-dark mt-3">Add Product</button>
         </form>
     </div>
 @endsection

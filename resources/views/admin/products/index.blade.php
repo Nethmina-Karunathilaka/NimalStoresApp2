@@ -1,9 +1,10 @@
-@extends('layouts.app')
+@extends('layouts.admin')
 
 @section('content')
+    <br><br>
     <div class="container">
-        <h1>Product Management</h1>
-        <a href="{{ route('admin.products.create') }}" class="btn btn-primary">Add Product</a>
+        <h1>Product Management</h1><br>
+        <a href="{{ route('admin.products.create') }}" class="btn btn-dark btn-lg">Add Product</a>
 
         <table class="table mt-4">
             <thead>
@@ -21,11 +22,11 @@
                         <td>{{ $product->description }}</td>
                         <td>{{ $product->price }}</td>
                         <td>
-                            <a href="{{ route('admin.products.edit', $product) }}" class="btn btn-warning">Edit</a>
+                            <a href="{{ route('admin.products.edit', $product) }}" class="btn btn-warning active">Edit</a>
                             <form action="{{ route('admin.products.destroy', $product) }}" method="POST" style="display:inline;">
                                 @csrf
                                 @method('DELETE')
-                                <button type="submit" class="btn btn-danger">Delete</button>
+                                <button type="submit" class="btn btn-danger active">Delete</button>
                             </form>
                         </td>
                     </tr>

@@ -1,6 +1,7 @@
-@extends('layouts.app')
+@extends('layouts.admin')
 
 @section('content')
+<br><br>
     <div class="container">
         <h1>Edit Product</h1>
 
@@ -30,7 +31,7 @@
                 @endif
             </div>
 
-            <button type="submit" class="btn btn-primary mt-3">Update Product</button>
+            <button type="submit" class="btn btn-dark mt-3">Update Product</button>
         </form>
     </div>
 @endsection

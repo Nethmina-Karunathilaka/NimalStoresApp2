@@ -39,32 +39,28 @@
 
 @endsection
 <script>
-    document.addEventListener('DOMContentLoaded',function(){
+    document.querySelectorAll('.add-to-cart-form').forEach(form => {
+    form.addEventListener('submit', function (e) {
+        e.preventDefault();
 
-    
-        document.querySelectorAll('.add-to-cart-form').forEach(form => {
-        form.addEventListener('submit', function (e) {
-            e.preventDefault();
+        const formData = new FormData(this);
 
-            const formData = new FormData(this);
-
-            fetch('/cart/add', {
-                method: 'POST',
-                headers: {
-                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
-                },
-                body: formData
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.message) {
-                    alert(data.message); // Display success message
-                }
-            })
-            .catch(error => console.error('Error:', error));
-        });
-        });
-    });    
+        fetch('/cart/add', {
+            method: 'POST',
+            headers: {
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+            },
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.message) {
+                alert(data.message); // Display success message
+            }
+        })
+        .catch(error => console.error('Error:', error));
+    });
+});
 
 </script>
 </html>

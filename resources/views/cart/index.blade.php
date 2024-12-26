@@ -1,4 +1,4 @@
-@extends('layouts.admin')
+@extends('layouts.user')
 
 @section('content')
 <div class="container">
@@ -43,7 +43,10 @@
             @csrf
             <button type="submit" class="btn btn-danger">Clear Cart</button>
         </form>
-        <button id="checkout-button" class="btn btn-dark">Checkout</button>
+        <form action="{{ route('orders.checkout')}}" method="POST" class="checkout-cart-form">
+            @csrf
+            <button type="submit" class="btn btn-dark">Checkout</button>
+        </form>
     @else
         <p>Your cart is empty!</p>
     @endif
@@ -80,56 +83,10 @@
                 <p>Your total is: Rs <span id="order-total"></span></p>
             </div>
             <div class="modal-footer">
-                <form action="{{ route('orders.checkout') }}" method="POST" id="checkoutForm">
-                    @csrf
-                    <button type="submit" class="btn btn-success">Confirm</button>
-                </form>
+                <button type="button" class="btn btn-primary" id="confirmClearCart">Checkout</button>
                 <button class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
             </div>
         </div>
     </div>
 </div>
-@endsection
-
-@section('scripts')
-<script>
-    // Store the form being cleared
-    let currentClearCartForm = null;
-
-    // Attach event listeners to clear-cart forms
-    document.querySelectorAll('.clear-cart-form').forEach(form => {
-        form.addEventListener('submit', function (e) {
-            e.preventDefault();
-            currentClearCartForm = this;
-            const clearCartModal = new bootstrap.Modal(document.getElementById('clearCartModal'));
-            clearCartModal.show();
-        });
-    });
-
-    // Handle the clear cart confirmation
-    document.getElementById('confirmClearCart').addEventListener('click', function () {
-        if (currentClearCartForm) {
-            currentClearCartForm.submit();
-        }
-    });
-
-    // Checkout button functionality
-    document.getElementById('checkout-button').addEventListener('click', function () {
-        console.log("Checkout button clicked");
-        const total = calculateTotal(); // Calculate the total dynamically
-        document.getElementById('order-total').textContent = total.toFixed(2);
-        const checkoutModal = new bootstrap.Modal(document.getElementById('checkoutModal'));
-        checkoutModal.show();
-    });
-
-    // Calculate cart total dynamically
-    function calculateTotal() {
-        let total = 0;
-        const cartItems = @json(session('cart', []));
-        cartItems.forEach(item => {
-            total += item.price * item.quantity;
-        });
-        return total;
-    }
-</script>
 @endsection

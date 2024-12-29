@@ -8,8 +8,12 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\MobileverifyController;
 use App\Http\Controllers\Auth\VerificationController;
 use App\Http\Controllers\CartController;
-use App\Http\Controllers\OrderController;
+use App\Http\Controllers\OrderControlller;
 use App\Http\Controllers\ProductSearchController;
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\AboutController;
+use App\Http\Controllers\Admin\UserManagementController;
+use App\Models\Product;
 
 
 /*
@@ -24,8 +28,20 @@ use App\Http\Controllers\ProductSearchController;
 */
 
 Route::get('/', function () {
-    return view('welcome');
-});
+
+    // Fetch featured products
+    $featuredProducts = Product::where('featured', true)->get();
+
+    // Pass featured products to the view
+    return view('welcome', compact('featuredProducts'));
+
+
+})->name('welcome');
+
+Route::get('/about', [AboutController::class, 'about'])->name('about');
+Route::get('/welcomeabout', [AboutController::class, 'welcomeabout'])->name('welcomeabout');
+
+
 
 
 Route::middleware('auth')->group(function () {
@@ -58,6 +74,7 @@ Route::middleware(['auth', 'is_admin'])->prefix('admin')->name('admin.')->group(
 
 
 Route::get('/products', [UserController::class, 'showProducts'])->name('products');
+Route::get('/welcomeproducts', [UserController::class, 'welcomeProducts'])->name('welcomeproducts');
 
 
 
@@ -80,19 +97,32 @@ Route::middleware(['auth'])->group(function () {
 
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/dashboard', function () {
-        return view('dashboard');
-    });
+        // Fetch featured products
+        $featuredProducts = Product::where('featured', true)->get();
+        return view('dashboard', compact('featuredProducts'));
+    })->name('dashboard'); // Added route name
 });
 
 
 
-Route::post('/checkout', [OrderController::class, 'store'])->middleware('auth')->name('orders.checkout'); // Stores the order after checkout
-Route::get('/orders', [OrderController::class, 'index'])->middleware('auth')->name('orders.index'); // View user's orders (named route)
-Route::get('/admin/orders', [OrderController::class, 'adminIndex'])->middleware('admin')->name('admin.orders.index'); // Admin view all orders
-Route::patch('/admin/orders/{id}/status', [OrderController::class, 'updateStatus'])->middleware('admin'); // Admin updates order status
+// Checkout route (form submission)
+Route::post('/checkout', [OrderControlller::class, 'store'])->middleware('auth')->name('orders.checkout');
+
+// View user's orders
+Route::get('/orders', [OrderControlller::class, 'index'])->middleware('auth')->name('orders.index');
+
+// Admin: View all orders
+Route::get('/admin/orders', [OrderControlller::class, 'adminIndex'])->middleware('is_admin')->name('admin.orders.index');
+
+// Admin: Update order status
+Route::patch('/admin/orders/{order}/status', [OrderControlller::class, 'updateStatus'])->middleware('is_admin')->name('admin.orders.updateStatus');
+
 
 Route::get('/search', [ProductSearchController::class, 'search'])->name('search');
 Route::get('/autosuggest', [ProductSearchController::class, 'autosuggest'])->name('autosuggest');
+
+
+Route::get('/admin/users', [UserManagementController::class, 'index'])->name('admin.users.index')->middleware('auth', 'is_admin');
 
 
 require __DIR__.'/auth.php';

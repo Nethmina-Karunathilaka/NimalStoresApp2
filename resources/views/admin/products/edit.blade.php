@@ -31,7 +31,20 @@
                 @endif
             </div>
 
+            <div class="form-group">
+                <label for="featured">Featured Product</label>
+                <input type="checkbox" name="featured" id="featured" value="1" {{ $product->featured ? 'checked' : '' }}>
+            </div>
+
             <button type="submit" class="btn btn-dark mt-3">Update Product</button>
         </form>
     </div>
+    <footer>
+        <div class="footer" style="margin-top:10px">
+          <p class="email">Email: nipun.nethmina@icloud.com</p>
+          <p class="address">Address: Nimal Stores, Wariyapola</p>
+          <p class="about"><a href="{{route ('about')}}">About</a></p><br><br>
+          <p class="copyright">© NimalStores</p>
+        </div>
+    </footer>
 @endsection

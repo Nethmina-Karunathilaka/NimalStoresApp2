@@ -1,27 +1,30 @@
 @extends('layouts.admin')
 
 @section('content')
-<div class="nav">
-        <div class="nav-item"><a href="">DashBoard</a></div>
-        <div class="nav-item"><a href="">Order Management</a></div>
-        <div class="nav-item"><a href="{{route('admin.products.index')}}">Products Management</a></div>
-        <div class="nav-item"><a href="">User Details</a></div>
-    </div>
 
     <div class="cards">
         <div class="card-con">
             <h2>Total Users</h2>
-            <span>0</span>
+            <p>{{ $totalUsers }}</p>
         </div>
 
         <div class="card-con">
             <h2>Total Orders</h2>
-            <span>0</span>
+            <p>{{ $totalOrders }}</p>
         </div>
 
         <div class="card-con">
             <h2>Total Products</h2>
-            <span>0</span>
+            <p>{{$totalProducts}}</p>
         </div>
     </div>
+    <footer>
+        <div class="footer">
+          <p class="email">Email: nipun.nethmina@icloud.com</p>
+          <p class="address">Address: Nimal Stores, Wariyapola</p>
+          <p class="about"><a href="{{route ('about')}}">About</a></p><br><br>
+          <p class="copyright">© NimalStores</p>
+        </div>
+    </footer>
+
 @endsection

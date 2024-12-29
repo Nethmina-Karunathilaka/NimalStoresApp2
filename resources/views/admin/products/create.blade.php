@@ -30,4 +30,12 @@
             <button type="submit" class="btn btn-dark mt-3">Add Product</button>
         </form>
     </div>
+    <footer>
+    <div class="footer" style="position:fixed">
+          <p class="email">Email: nipun.nethmina@icloud.com</p>
+          <p class="address">Address: Nimal Stores, Wariyapola</p>
+          <p class="about"><a href="{{route ('about')}}">About</a></p><br><br>
+          <p class="copyright">© NimalStores</p>
+        </div>
+    </footer>
 @endsection

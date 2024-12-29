@@ -44,6 +44,7 @@ class ProductController extends Controller
             'image' => $imagePath,
         ]);
 
+        
         return redirect()->route('admin.products.index')->with('success', 'Product added successfully!');
     }
 
@@ -61,6 +62,7 @@ class ProductController extends Controller
             'description' => 'required',
             'price' => 'required|numeric',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'featured' => 'nullable|boolean',
         ]);
 
         // Update the product image if exists
@@ -80,6 +82,10 @@ class ProductController extends Controller
             'price' => $request->price,
         ]);
 
+        $product->featured = $request->has('featured');  // Set true if the checkbox is checked, false otherwise
+        $product->save();
+
+
         return redirect()->route('admin.products.index')->with('success', 'Product updated successfully!');
     }
 
@@ -94,5 +100,6 @@ class ProductController extends Controller
         $product->delete();
         return redirect()->route('admin.products.index')->with('success', 'Product deleted successfully!');
     }
+
 }
 

@@ -13,6 +13,13 @@ class UserController extends Controller
     {
         $products = Product::all();
         return view('products', compact('products'));
+
+       
+    }
+
+    public function welcomeproducts(){
+        $products = Product::all();
+        return view('welcomeproducts', compact('products'));
     }
 
     

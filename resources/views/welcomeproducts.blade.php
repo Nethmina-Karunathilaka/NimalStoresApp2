@@ -1,4 +1,4 @@
-@extends('layouts.user')
+@extends('layouts.welcome')
 @section('content')
     <div class="main-title"><h2>OUR PRODUCTS</h2></div>
     <div class="product-grid">
@@ -22,7 +22,7 @@
                 <div class="card-des"><p>{{ Str::limit($product->description, 50) }}</p></div>
 
                 <!-- Optional: Add to Cart or View Details button -->
-                <form method="POST" action="{{ route('cart.add', $product->id) }}">
+                <form method="GET" action="{{ route('login') }}">
                     @csrf
                     <input type="hidden" name="product_id" value="{{ $product->id }}">
                     <div class="card-qty">
@@ -39,8 +39,8 @@
         <div class="footer">
           <p class="email">Email: nipun.nethmina@icloud.com</p>
           <p class="address">Address: Nimal Stores, Wariyapola</p>
-          <p class="about"><a href="{{route ('about')}}">About</a></p><br><br>
-          <p class="copyright">© NimalStores</p>
+          <p class="about"><a href="{{route ('welcomeabout')}}">About</a></p><br><br>
+          <p class="copyright">© Visulio Designs</p>
         </div>
     </footer>
 

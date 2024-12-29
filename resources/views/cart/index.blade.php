@@ -1,6 +1,39 @@
 @extends('layouts.user')
 
 @section('content')
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+            const orderTotalElement = document.querySelector('#order-total');
+            const confirmCheckoutButton = document.querySelector('#confirmCheckout');
+
+            // Ensure cart is passed properly to JavaScript and is an object
+            const cart = @json($cart);
+            console.log('Cart:', cart); // Debugging cart
+
+            // Check if cart is an object and has values
+            if (cart && typeof cart === 'object' && Object.keys(cart).length > 0) {
+                // Convert the object to an array using Object.values()
+                const cartArray = Object.values(cart);
+                
+                // Calculate the total using reduce
+                const total = cartArray.reduce((carry, item) => carry + (parseFloat(item.price) * item.quantity), 0);
+                
+                // Update the total in the UI
+                orderTotalElement.textContent = total.toFixed(2); // Show the total with 2 decimal places
+            } else {
+                orderTotalElement.textContent = 'Cart is empty!';
+            }
+
+            // Checkout button functionality (submit the form when clicked)
+            confirmCheckoutButton?.addEventListener('click', () => {
+                document.querySelector('#checkout-form').submit();
+            });
+    });
+</script>        
+
+
+
+
 <div class="container">
     <h2>Your Cart</h2>
     @if (session('cart') && count(session('cart')) > 0)
@@ -43,9 +76,11 @@
             @csrf
             <button type="submit" class="btn btn-danger">Clear Cart</button>
         </form>
-        <form action="{{ route('orders.checkout')}}" method="POST" class="checkout-cart-form">
+        <form action="{{ route('orders.checkout') }}" method="POST" id="checkout-form">
             @csrf
-            <button type="submit" class="btn btn-dark">Checkout</button>
+            <button type="button" class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#checkoutModal">
+            Checkout
+            </button>
         </form>
     @else
         <p>Your cart is empty!</p>
@@ -71,7 +106,7 @@
     </div>
 </div>
 
-<!-- Modal for Checkout Confirmation -->
+<!-- Checkout Confirmation Modal -->
 <div class="modal fade" id="checkoutModal" tabindex="-1" aria-labelledby="checkoutModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -83,10 +118,18 @@
                 <p>Your total is: Rs <span id="order-total"></span></p>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary" id="confirmClearCart">Checkout</button>
+                <button type="submit" class="btn btn-primary" id="confirmCheckout">Confirm</button>
                 <button class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
             </div>
         </div>
     </div>
 </div>
+<footer>
+        <div class="footer" style="position:fixed">
+          <p class="email">Email: nipun.nethmina@icloud.com</p>
+          <p class="address">Address: Nimal Stores, Wariyapola</p>
+          <p class="about"><a href="{{route ('about')}}">About</a></p><br><br>
+          <p class="copyright">© NimalStores</p>
+        </div>
+</footer>
 @endsection

@@ -1,5 +1,6 @@
-@extends('layouts.user')
-@section('content') 
+@extends('layouts.welcome')
+@section('content')
+    
     <div class="about-con">
         <h1 style="margin-bottom: 60px;">About Us</h1>
         <p style="margin: 20px 200px; text-align:center; color:rgb(255, 255, 255)">  
@@ -89,4 +90,6 @@
         <!-- Gallery -->
 
     </div>
-@endsection   
+@endsection
+
+</html>

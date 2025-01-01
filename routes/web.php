@@ -42,13 +42,13 @@ Route::get('/about', [AboutController::class, 'about'])->name('about');
 Route::get('/welcomeabout', [AboutController::class, 'welcomeabout'])->name('welcomeabout');
 
 
-
-
-Route::middleware('auth')->group(function () {
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+Route::middleware(['auth'])->group(function () {
+    Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::put('/profile/update-email', [ProfileController::class, 'updateEmail'])->name('profile.updateEmail');
+    Route::put('/profile/update-password', [ProfileController::class, 'updatePassword'])->name('profile.updatePassword');
+    Route::delete('/profile/delete', [ProfileController::class, 'destroy'])->name('profile.delete');
 });
+
 
 Route::prefix('cart')->group(function () {
     Route::get('/', [CartController::class, 'index'])->name('cart.index');
@@ -92,6 +92,9 @@ Route::middleware(['auth'])->group(function () {
     // Resend verification link
     Route::post('email/verification-notification', [VerificationController::class, 'resend'])
         ->name('verification.resend');
+    
+    Route::get('email/status', [VerificationController::class, 'showVerificationStatus'])
+        ->name('email.status');    
 });
 
 
@@ -119,6 +122,7 @@ Route::patch('/admin/orders/{order}/status', [OrderControlller::class, 'updateSt
 
 
 Route::get('/search', [ProductSearchController::class, 'search'])->name('search');
+Route::get('/searchinwelcome', [ProductSearchController::class, 'searchinwelcome'])->name('search.welcomeresults');
 Route::get('/autosuggest', [ProductSearchController::class, 'autosuggest'])->name('autosuggest');
 
 

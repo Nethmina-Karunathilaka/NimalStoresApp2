@@ -24,4 +24,13 @@ class ProductSearchController extends Controller
 
         return response()->json($suggestions);
     }
+
+
+    public function searchinwelcome(Request $request)
+    {
+        $query = $request->input('query');
+        $products = Product::where('name', 'LIKE', "%{$query}%")->get();
+
+        return view('search.welcomeresults', compact('products'));
+    }
 }

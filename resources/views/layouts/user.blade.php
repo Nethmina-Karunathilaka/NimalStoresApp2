@@ -7,6 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DashBoard</title>
     <link rel="stylesheet" href="{{asset('build//assets//main.css')}}">
+    <link rel="stylesheet" href="{{asset('build//assets//profile.css')}}">
     <link rel="stylesheet" href="{{asset('build//assets//about.css')}}">
     <link rel="stylesheet" href="{{asset('build//assets//search.css')}}">
     <link rel="stylesheet" href="{{asset('build//assets//admin.css')}}">
@@ -14,6 +15,8 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 
     <script>
         document.addEventListener('DOMContentLoaded',function(){
@@ -94,6 +97,25 @@
                 }
             });
 
+
+            function confirmLogout(event) {
+                event.preventDefault(); // Prevent default button behavior
+
+                // SweetAlert2 confirmation dialog
+                Swal.fire({
+                    title: 'Are you sure?',
+                    text: "You will be logged out!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: 'Yes, logout',
+                    cancelButtonText: 'Cancel',
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        // If confirmed, submit the logout form
+                        document.getElementById('logout-form').submit();
+                    }
+                });
+            }
         });
 
         
@@ -115,15 +137,13 @@
             <div id="suggestions" style="border: 1px solid #ddd; display: none;"></div>
         </div>
         <div>
-            <button class="btn-2"><a href="{{ route('logout') }}"
-                        onclick="event.preventDefault();
-                                    document.getElementById('logout-form').submit();">
-                        Logout
-                </a>
-                <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
-                         @csrf
-                </form>
+            <button class="btn-2" onclick="confirmLogout(event)">
+                <a href="#" style="color: inherit; text-decoration: none;">Logout</a>
             </button>
+
+            <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                @csrf
+            </form>
         </div>
     </header>
 
@@ -136,14 +156,14 @@
                 <a href="{{route('orders.index')}}">My Orders</a>
                 <a href="{{route('cart.index')}}">Cart</a>
                 <div>
-                    <a href="{{ route('logout') }}"
-                        onclick="event.preventDefault();
-                                    document.getElementById('logout-form').submit();">
+                    <button class="btn-2" onclick="confirmLogout(event)">
                         Logout
-                    </a>
-                    <form id="logout-form" action="" method="POST" class="d-none">
-                         @csrf
+                    </button>
+
+                    <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                        @csrf
                     </form>
+
                 </div>
               </div>
             </div>

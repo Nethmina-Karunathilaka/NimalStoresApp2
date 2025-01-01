@@ -11,14 +11,76 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+         
+        document.addEventListener('DOMContentLoaded',function(){
+            document.getElementById('search-box').addEventListener('input', function () {
+                const query = this.value;
+                const suggestionsBox = document.getElementById('suggestions');
+
+                if (query.length > 0) {
+                    fetch(`/autosuggest?query=${query}`)
+                        .then(response => response.json())
+                        .then(data => {
+                            let suggestionsHtml = '';
+                            data.forEach(item => {
+                                suggestionsHtml += `<div class="suggestion-item">${item}</div>`;
+                            });
+                            suggestionsBox.innerHTML = suggestionsHtml;
+                            suggestionsBox.style.display = 'block';
+                        });
+                } else {
+                    suggestionsBox.style.display = 'none';
+                }
+            });
+
+            const searchBox = document.getElementById('search-box');
+
+            if (searchBox) {
+            // Handle Enter keypress
+                searchBox.addEventListener('keydown', function (event) {
+                    if (event.key === 'Enter') { // Modern way of detecting Enter key
+                        event.preventDefault(); // Prevent default form submission (if applicable)
+
+                        const query = searchBox.value.trim();
+                        if (query) {
+                            // Redirect to search results page (example)
+                            window.location.href = `/searchinwelcome?query=${encodeURIComponent(query)}`;
+
+                        // OR fetch results via AJAX
+                        /*
+                        fetch(`/search?query=${query}`)
+                            .then(response => response.json())
+                            .then(data => {
+                                // Handle the returned search results
+                                console.log(data);
+                            });
+                            */
+                        }
+                    }
+                });
+            } else {
+            console.error('Search box not found!');
+            }
+
+            // Add event listener to handle clicking suggestions
+            document.getElementById('suggestions').addEventListener('click', function (e) {
+                if (e.target && e.target.matches(".suggestion-item")) {
+                    document.getElementById('search-box').value = e.target.textContent;
+                    this.style.display = 'none';
+                }
+            });
+        });    
+    </script>
 </head>
 @vite(['resources/sass/app.scss', 'resources/js/app.js'])
 <body>
     <header class="header">
         <a href="{{ route('welcome') }}" style="text-decoration:none;"><div class="logo">NIMAL STORES</div></a>
         <div>
-            <input type="text" placeholder="Search in Nimal Stores" class="search-bar">
+            <input type="text" placeholder="Search in Nimal Stores" class="search-bar" id="search-box">
             <i class="fas fa-search search-icon" style="position: relative; right:40px; color:rgb(105, 105, 105)"></i>
+            <div id="suggestions" style="border: 1px solid #ddd; display: none;"></div>
         </div>
         <div>
             <button class="btn-1"><a href="{{route('login')}}">Login</a></button>

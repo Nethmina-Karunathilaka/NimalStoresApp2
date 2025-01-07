@@ -99,7 +99,7 @@
                 <td>{{ $user->name }}</td>
                 <td>{{ $user->email }}</td>
                 <td>{{ $user->created_at->format('Y-m-d') }}</td>
-                <td>${{ number_format($user->total_checkout_amount, 2) }}</td>
+                <td>Rs {{ number_format($user->total_checkout_amount, 2) }}</td>
             </tr>
             @endforeach
         </tbody>

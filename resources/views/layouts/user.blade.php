@@ -98,28 +98,8 @@
             });
 
 
-            function confirmLogout(event) {
-                event.preventDefault(); // Prevent default button behavior
-
-                // SweetAlert2 confirmation dialog
-                Swal.fire({
-                    title: 'Are you sure?',
-                    text: "You will be logged out!",
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonText: 'Yes, logout',
-                    cancelButtonText: 'Cancel',
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        // If confirmed, submit the logout form
-                        document.getElementById('logout-form').submit();
-                    }
-                });
-            }
         });
-
         
-
     </script>  
     <style>
     </style>  
@@ -137,12 +117,16 @@
             <div id="suggestions" style="border: 1px solid #ddd; display: none;"></div>
         </div>
         <div>
-            <button class="btn-2" onclick="confirmLogout(event)">
-                <a href="#" style="color: inherit; text-decoration: none;">Logout</a>
-            </button>
-
-            <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
-                @csrf
+            <script>
+            function confirmLogout() {
+                if (confirm("Are you sure you want to log out?")) {
+                window.location.href = '/logout';
+                }
+            }
+            </script>
+            <form action="/logout" method="POST">
+                    @csrf <!-- Laravel -->
+                    <button onclick="confirmLogout()" class="btn-2" type="submit">Logout</button>
             </form>
         </div>
     </header>
@@ -152,18 +136,14 @@
             <div><i class="fa-solid fa-user"></i>
               <span style="margin-left: 3px;">Hi {{ Auth::user()->name }} !..</span><i class="fa-solid fa-caret-down" style="margin-left: 6px;"></i>
               <div class="dropdown-items">
-                <a href="{{route('profile.edit')}}">Account</a>
+                <a href="{{route('profile.edit')}}">User Profile</a>
                 <a href="{{route('orders.index')}}">My Orders</a>
                 <a href="{{route('cart.index')}}">Cart</a>
                 <div>
-                    <button class="btn-2" onclick="confirmLogout(event)">
-                        Logout
-                    </button>
-
-                    <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
-                        @csrf
-                    </form>
-
+                <form action="/logout" method="POST">
+                    @csrf <!-- Laravel -->
+                    <button class="dropdown-items" type="submit">Logout</button>
+                </form>
                 </div>
               </div>
             </div>

@@ -49,6 +49,8 @@
                                     <th>#</th>
                                     <th>User</th>
                                     <th>Total</th>
+                                    <th>Address</th>
+                                    <th>Contact Number</th>
                                     <th>Status</th>
                                     <th>Actions</th>
                                 </tr>
@@ -59,6 +61,8 @@
                                         <td>{{ $order->id }}</td>
                                         <td>{{ $order->user->name }}</td>
                                         <td>Rs {{ number_format($order->total, 2) }}</td>
+                                        <td>{{ $order->address }}</td>
+                                        <td>{{ $order->mobile_number }}</td>
                                         <td>{{ $order->status }}</td>
                                         <td>
                                             <form method="POST" action="{{ route('admin.orders.updateStatus', $order->id) }}">

@@ -23,6 +23,8 @@ class OrderControlller extends Controller
         $order = Order::create([
             'user_id' => auth()->id(),
             'total' => $total,
+            'address' => $address,
+            'mobile_number' =>$mobile_number,
             'status' => 'Pending',
         ]);
 

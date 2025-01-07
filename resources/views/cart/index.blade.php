@@ -72,16 +72,18 @@
                 @endforeach
             </tbody>
         </table>
+        <div style="display:flex;">
         <form action="{{ route('cart.clear') }}" method="POST" class="clear-cart-form">
             @csrf
             <button type="submit" class="btn btn-danger">Clear Cart</button>
         </form>
-        <form action="{{ route('orders.checkout') }}" method="POST" id="checkout-form">
+        <form action="{{ route('orders.checkout') }}" method="POST" id="checkout-form" style="margin-left:10px;">
             @csrf
             <button type="button" class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#checkoutModal">
             Checkout
             </button>
         </form>
+</div>
     @else
         <p>Your cart is empty!</p>
     @endif

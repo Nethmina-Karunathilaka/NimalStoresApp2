@@ -106,6 +106,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
     })->name('dashboard'); // Added route name
 });
 
+Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])
+    ->name('logout');
+
+
 
 
 // Checkout route (form submission)
